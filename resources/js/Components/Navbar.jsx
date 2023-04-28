@@ -64,7 +64,7 @@ export default function Navbar({ user, children }) {
               {Links.map((link) => {
                 if (
                   link.label === "Dashboard" &&
-                  !user.roles.some((role) => role.name !== "admin")
+                  !user.roles.some((role) => role.name === "admin")
                 )
                   return;
                 return (
