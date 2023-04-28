@@ -5,23 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Establishment;
 use App\Models\Inquiry;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class InquiryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Inquiries/Index');
+        return Inertia::render('Inquiries/Index', [
+            'inquiries' => $request->user()
+                ->inquiries->load('establishment.image'),
+        ]);
     }
 
     public function create(Request $request, Establishment $establishment)
     {
         return Inertia::render('Inquiries/Index', [
             'establishment' => $establishment,
-            'inquiries' => $establishment->inquiries
-                ->load('user.image', 'establishment.image')
-                ->where('user_id', $request->user()->id)->all(),
+            'inquiries' => $request->user()
+                ->inquiries->load('establishment.image'),
         ]);
     }
 

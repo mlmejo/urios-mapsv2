@@ -17,9 +17,15 @@ import { Head } from "@inertiajs/react";
 import { FiUser } from "react-icons/fi";
 import ReviewFormModal from "./Partials/ReviewFormModal";
 import { StarIcon } from "@chakra-ui/icons";
+import BookingFormModal from "./Partials/BookingFormModal";
 
 export default function Show({ auth, establishment }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: bookingIsOpen,
+    onOpen: bookingOnOpen,
+    onClose: bookingOnClose,
+  } = useDisclosure();
 
   return (
     <Navbar user={auth.user}>
@@ -82,6 +88,9 @@ export default function Show({ auth, establishment }) {
               >
                 Inquire
               </Button>
+              <Button onClick={bookingOnOpen} colorScheme="blue">
+                Book
+              </Button>
             </VStack>
           </Flex>
           <Box
@@ -132,6 +141,12 @@ export default function Show({ auth, establishment }) {
         establishment={establishment}
         isOpen={isOpen}
         onClose={onClose}
+      />
+
+      <BookingFormModal
+        establishment={establishment}
+        isOpen={bookingIsOpen}
+        onClose={bookingOnClose}
       />
     </Navbar>
   );

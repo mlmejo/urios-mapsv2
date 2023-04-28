@@ -35,4 +35,9 @@ class Establishment extends Model
     {
         return $this->hasMany(Inquiry::class);
     }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

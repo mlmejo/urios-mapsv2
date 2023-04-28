@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EstablishmentBookingController;
 use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\EstablishmentLocationController;
 use App\Http\Controllers\EstablishmentReviewController;
@@ -70,6 +71,9 @@ Route::post('/establishments/{establishment}/inquiries', [InquiryController::cla
 
 Route::resource('inquiries', InquiryController::class)
     ->except(['create', 'store'])
+    ->middleware('auth');
+
+Route::resource('establishments.bookings', EstablishmentBookingController::class)
     ->middleware('auth');
 
 require __DIR__ . '/auth.php';

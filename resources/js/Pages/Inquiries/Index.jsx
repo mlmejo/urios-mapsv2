@@ -1,9 +1,14 @@
 import Navbar from "@/Components/Navbar";
-import { Box, Flex, Avatar, Text, Button, Input } from "@chakra-ui/react";
+import { Box, Flex, Avatar, Text, Button, Input, Link } from "@chakra-ui/react";
 import { Head, useForm } from "@inertiajs/react";
 import MessagesSection from "./Partials/MessagesSection";
 
-export default function Index({ auth, establishment, inquiries }) {
+export default function Index({
+  auth,
+  establishment,
+  inquiries,
+  userInquiries,
+}) {
   return (
     <Navbar user={auth.user}>
       <Head title="Inquiries" />
@@ -15,44 +20,94 @@ export default function Index({ auth, establishment, inquiries }) {
               <Text fontSize="sm" fontWeight="bold" mb={2}>
                 Recent Conversations
               </Text>
-              <Box
-                mb={4}
-                borderRadius="md"
-                boxShadow="sm"
-                p={2}
-                _hover={{ bg: "gray.200" }}
-              >
-                <Flex alignItems="center">
-                  <Avatar name="John Doe" size="sm" mr={2} />
-                  <Box>
-                    <Text fontWeight="bold" fontSize="sm">
-                      John Doe
-                    </Text>
-                    <Text fontSize="xs">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </Text>
-                  </Box>
-                </Flex>
-              </Box>
-              <Box
-                borderRadius="md"
-                boxShadow="sm"
-                p={2}
-                _hover={{ bg: "gray.200" }}
-              >
-                <Flex alignItems="center">
-                  <Avatar name="Jane Doe" size="sm" mr={2} />
-                  <Box>
-                    <Text fontWeight="bold" fontSize="sm">
-                      Jane Doe
-                    </Text>
-                    <Text fontSize="xs">
-                      Sed do eiusmod tempor incididunt ut labore et dolore magna
-                      aliqua.
-                    </Text>
-                  </Box>
-                </Flex>
-              </Box>
+              {userInquiries &&
+                userInquiries
+                  .slice()
+                  .reverse()
+                  .filter(
+                    (inquiry, index, self) =>
+                      index ===
+                      self.findIndex((i) => i.user.id === inquiry.user.id)
+                  )
+                  .map((inquiry) => {
+                    return (
+                      <Box
+                        key={inquiry.id}
+                        mb={4}
+                        borderRadius="md"
+                        boxShadow="sm"
+                        p={2}
+                        _hover={{ bg: "gray.200" }}
+                      >
+                        <Link
+                          href={route(
+                            "establishments.inquiries.create",
+                            inquiry.establishment.id
+                          )}
+                        >
+                          <Flex alignItems="center">
+                            <Avatar
+                              name={inquiry.establishment.name}
+                              src={`/${inquiry.establishment.image.path}`}
+                              size="sm"
+                              mr={2}
+                            />
+                            <Box>
+                              <Text fontWeight="bold" fontSize="sm">
+                                {inquiry.establishment.name}
+                              </Text>
+                              <Text fontSize="xs">{inquiry.message}</Text>
+                            </Box>
+                          </Flex>
+                        </Link>
+                      </Box>
+                    );
+                  })}
+              {inquiries &&
+                inquiries
+                  .slice()
+                  .reverse()
+                  .filter(
+                    (inquiry, index, self) =>
+                      index ===
+                      self.findIndex(
+                        (i) => i.establishment.id === inquiry.establishment.id
+                      )
+                  )
+                  .map((inquiry) => {
+                    return (
+                      <Box
+                        key={inquiry.id}
+                        mb={4}
+                        borderRadius="md"
+                        boxShadow="sm"
+                        p={2}
+                        _hover={{ bg: "gray.200" }}
+                      >
+                        <Link
+                          href={route(
+                            "establishments.inquiries.create",
+                            inquiry.establishment.id
+                          )}
+                        >
+                          <Flex alignItems="center">
+                            <Avatar
+                              name={inquiry.establishment.name}
+                              src={`/${inquiry.establishment.image.path}`}
+                              size="sm"
+                              mr={2}
+                            />
+                            <Box>
+                              <Text fontWeight="bold" fontSize="sm">
+                                {inquiry.establishment.name}
+                              </Text>
+                              <Text fontSize="xs">{inquiry.message}</Text>
+                            </Box>
+                          </Flex>
+                        </Link>
+                      </Box>
+                    );
+                  })}
             </Box>
           </Box>
 

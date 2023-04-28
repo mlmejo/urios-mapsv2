@@ -128,7 +128,7 @@ export default function Create({ auth }) {
                 <></>
               )}
             </FormControl>
-            <FormControl id="address">
+            <FormControl id="address" isRequired isInvalid={errors.address}>
               <FormLabel>Address</FormLabel>
               <Input
                 type="text"

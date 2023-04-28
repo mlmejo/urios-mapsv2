@@ -16,16 +16,15 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-export default function ReviewFormModal({ establishment, isOpen, onClose }) {
+export default function BookingFormModal({ establishment, isOpen, onClose }) {
   const { data, setData, post, errors } = useForm({
-    content: "",
-    rating: 1,
+    date: "",
   });
 
   const submit = (e) => {
     e.preventDefault();
 
-    post(route("establishments.reviews.store", establishment.id), {
+    post(route("establishments.bookings.store", establishment.id), {
       onSuccess: () => location.reload(),
     });
   };
@@ -39,28 +38,16 @@ export default function ReviewFormModal({ establishment, isOpen, onClose }) {
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={4}>
-              <FormControl id="content" isInvalid={errors.content}>
-                <FormLabel>Your Review</FormLabel>
+              <FormControl id="content" isInvalid={errors.longitude}>
+                <FormLabel>Booking Date</FormLabel>
                 <Input
-                  type="text"
-                  name="content"
-                  value={data.content}
-                  onChange={(e) => setData("content", e.target.value)}
+                  type="date"
+                  name="date"
+                  value={data.date}
+                  onChange={(e) => setData("date", e.target.value)}
                 />
-                {errors.content ? (
-                  <FormErrorMessage>{errors.content}</FormErrorMessage>
-                ) : (
-                  <></>
-                )}
-              </FormControl>
-              <FormControl id="rating" isInvalid={errors.rating}>
-                <FormLabel>Rating</FormLabel>
-                <Rating
-                  rating={data.rating}
-                  setRating={(n) => setData("rating", n)}
-                />
-                {errors.rating ? (
-                  <FormErrorMessage>{errors.rating}</FormErrorMessage>
+                {errors.date ? (
+                  <FormErrorMessage>{errors.date}</FormErrorMessage>
                 ) : (
                   <></>
                 )}

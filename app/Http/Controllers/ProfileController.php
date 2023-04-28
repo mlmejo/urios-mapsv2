@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +25,12 @@ class ProfileController extends Controller
         return Inertia::render('Profile/Edit', [
             'establishments' => $request->user()
                 ->establishments->load('image'),
+            'bookings' => Booking::whereHas('establishment', function (Builder $query)
+            use ($request) {
+                $query->where('user_id', $request->user()->id);
+            })
+                ->with('user.image', 'establishment')
+                ->get(),
         ]);
     }
 
