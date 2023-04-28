@@ -46,4 +46,35 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function assignRole(string $roleName)
+    {
+        $role = Role::where('name', $roleName)->first();
+
+        if ($role === null) {
+            throw new \Exception("Role with name $roleName does not exist.");
+        }
+
+        $this->roles()->attach($role);
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function establishments()
+    {
+        return $this->hasMany(Establishment::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function inquries()
+    {
+        return $this->belongsTo(Inquiry::class);
+    }
 }

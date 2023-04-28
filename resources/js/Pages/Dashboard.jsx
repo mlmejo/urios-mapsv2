@@ -1,25 +1,118 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import Navbar from "@/Components/Navbar";
+import {
+  Box,
+  Button,
+  Heading,
+  Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Switch,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Head } from "@inertiajs/react";
+import axios from "axios";
+import { useState } from "react";
+import {
+  default as CoordinatesForm,
+  default as CoordinatesFormModal,
+} from "./Partials/CoordinatesFormModal";
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ auth, establishments }) {
+  const [_establishments, setEstablishments] = useState(establishments);
+  const [selectedEstablishment, setSelectedEstablishment] = useState(null);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleChange = (establishment) => {
+    axios
+      .post(route("establishments.toggle-status", establishment.id))
+      .then((response) => setEstablishments(response.data))
+      .catch((err) => console.error(err));
+  };
+
+  const handleOpen = (establishment) => {
+    onOpen();
+    setSelectedEstablishment(establishment);
+  };
+
   return (
-    <AuthenticatedLayout
-      user={auth.user}
-      header={
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Dashboard
-        </h2>
-      }
-    >
+    <Navbar user={auth.user}>
       <Head title="Dashboard" />
 
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900">You're logged in!</div>
-          </div>
-        </div>
-      </div>
-    </AuthenticatedLayout>
+      <Box p={4}>
+        <Heading as="h2" size="lg" textAlign="center" mb={8}>
+          Establishments
+        </Heading>
+
+        <TableContainer>
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Establishment Name</Th>
+                <Th>Proprietor</Th>
+                <Th>Address</Th>
+                <Th>Coordinates</Th>
+                <Th>Approved</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {!_establishments.length > 0 ? (
+                <Tr>
+                  <Td colSpan={5} textAlign="center" fontWeight="bold">
+                    No data available.
+                  </Td>
+                </Tr>
+              ) : (
+                <></>
+              )}
+              {_establishments.map((establishment) => {
+                return (
+                  <Tr key={establishment.id}>
+                    <Td fontWeight="medium" textTransform="uppercase">
+                      {establishment.name}
+                    </Td>
+                    <Td>{establishment.user.name}</Td>
+                    <Td>{establishment.address}</Td>
+                    <Td>
+                      <Link
+                        as="button"
+                        textColor="blue"
+                        onClick={() => handleOpen(establishment)}
+                      >
+                        View Coordinates
+                      </Link>
+                    </Td>
+                    <Td>
+                      <Switch
+                        onChange={(e) => handleChange(establishment)}
+                        defaultChecked={establishment.active}
+                      />
+                    </Td>
+                  </Tr>
+                );
+              })}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Box>
+
+      <CoordinatesFormModal
+        isOpen={isOpen}
+        onClose={onClose}
+        establishment={selectedEstablishment}
+      />
+    </Navbar>
   );
 }

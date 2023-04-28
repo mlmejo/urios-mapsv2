@@ -1,18 +1,37 @@
-import { useEffect } from "react";
-import GuestLayout from "@/Layouts/GuestLayout";
-import InputError from "@/Components/InputError";
-import InputLabel from "@/Components/InputLabel";
-import PrimaryButton from "@/Components/PrimaryButton";
-import TextInput from "@/Components/TextInput";
-import { Head, Link, useForm } from "@inertiajs/react";
+import {
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  InputGroup,
+  HStack,
+  InputRightElement,
+  Stack,
+  Button,
+  Heading,
+  Text,
+  useColorModeValue,
+  Link,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { Head, useForm } from "@inertiajs/react";
 
-export default function Register() {
-  const { data, setData, post, processing, errors, reset } = useForm({
-    name: "",
-    email: "",
+export default function Register({ isAdmin }) {
+  const { data, setData, post, errors, reset } = useForm({
+    name: isAdmin ? "Administrator" : "",
+    email: isAdmin ? "admin@example.com" : "",
     password: "",
     password_confirmation: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleChange = (e) => {
+    setData(e.target.name, e.target.value);
+  };
 
   useEffect(() => {
     return () => {
@@ -23,98 +42,145 @@ export default function Register() {
   const submit = (e) => {
     e.preventDefault();
 
-    post(route("register"));
+    post(isAdmin ? route("admin.store") : route("register"));
   };
 
   return (
-    <GuestLayout>
-      <Head title="Register" />
+    <Flex
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bg={useColorModeValue("gray.50", "gray.800")}
+    >
+      {isAdmin ? (
+        <Head title="Create Administrator Account" />
+      ) : (
+        <Head title="Sign Up" />
+      )}
 
-      <form onSubmit={submit}>
-        <div>
-          <InputLabel htmlFor="name" value="Name" />
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={4} px={6}>
+        <Stack align={"center"}>
+          {isAdmin ? (
+            <Heading fontSize={"3xl"} textAlign={"center"}>
+              Create an administrator account
+            </Heading>
+          ) : (
+            <Heading fontSize={"4xl"} textAlign={"center"}>
+              Sign up
+            </Heading>
+          )}
+        </Stack>
+        <Box
+          width={"md"}
+          rounded={"lg"}
+          bg={useColorModeValue("white", "gray.700")}
+          boxShadow={"lg"}
+          p={8}
+        >
+          <form onSubmit={submit}>
+            <Stack spacing={4}>
+              <FormControl id="name" isRequired isInvalid={errors.name}>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  type="text"
+                  name="name"
+                  value={data.name}
+                  onChange={handleChange}
+                />
 
-          <TextInput
-            id="name"
-            name="name"
-            value={data.name}
-            className="mt-1 block w-full"
-            autoComplete="name"
-            isFocused={true}
-            onChange={(e) => setData("name", e.target.value)}
-            required
-          />
-
-          <InputError message={errors.name} className="mt-2" />
-        </div>
-
-        <div className="mt-4">
-          <InputLabel htmlFor="email" value="Email" />
-
-          <TextInput
-            id="email"
-            type="email"
-            name="email"
-            value={data.email}
-            className="mt-1 block w-full"
-            autoComplete="username"
-            onChange={(e) => setData("email", e.target.value)}
-            required
-          />
-
-          <InputError message={errors.email} className="mt-2" />
-        </div>
-
-        <div className="mt-4">
-          <InputLabel htmlFor="password" value="Password" />
-
-          <TextInput
-            id="password"
-            type="password"
-            name="password"
-            value={data.password}
-            className="mt-1 block w-full"
-            autoComplete="new-password"
-            onChange={(e) => setData("password", e.target.value)}
-            required
-          />
-
-          <InputError message={errors.password} className="mt-2" />
-        </div>
-
-        <div className="mt-4">
-          <InputLabel
-            htmlFor="password_confirmation"
-            value="Confirm Password"
-          />
-
-          <TextInput
-            id="password_confirmation"
-            type="password"
-            name="password_confirmation"
-            value={data.password_confirmation}
-            className="mt-1 block w-full"
-            autoComplete="new-password"
-            onChange={(e) => setData("password_confirmation", e.target.value)}
-            required
-          />
-
-          <InputError message={errors.password_confirmation} className="mt-2" />
-        </div>
-
-        <div className="flex items-center justify-end mt-4">
-          <Link
-            href={route("login")}
-            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Already registered?
-          </Link>
-
-          <PrimaryButton className="ml-4" disabled={processing}>
-            Register
-          </PrimaryButton>
-        </div>
-      </form>
-    </GuestLayout>
+                {errors.name ? (
+                  <FormErrorMessage>{errors.name}</FormErrorMessage>
+                ) : (
+                  <></>
+                )}
+              </FormControl>
+              <FormControl id="email" isRequired isInvalid={errors.email}>
+                <FormLabel>Email address</FormLabel>
+                <Input
+                  type="email"
+                  name="email"
+                  value={data.email}
+                  onChange={handleChange}
+                />
+                {errors.email ? (
+                  <FormErrorMessage>{errors.email}</FormErrorMessage>
+                ) : (
+                  <></>
+                )}
+              </FormControl>
+              <FormControl id="password" isRequired isInvalid={errors.password}>
+                <FormLabel>Password</FormLabel>
+                <InputGroup>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={data.password}
+                    onChange={handleChange}
+                  />
+                  {errors.password ? (
+                    <FormErrorMessage>{errors.password}</FormErrorMessage>
+                  ) : (
+                    <></>
+                  )}
+                  <InputRightElement h={"full"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }
+                    >
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+              <FormControl id="password_confirmation" isRequired>
+                <FormLabel>Confirm Password</FormLabel>
+                <InputGroup>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    name="password_confirmation"
+                    value={data.password_confirmation}
+                    onChange={handleChange}
+                  />
+                  <InputRightElement h={"full"}>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() =>
+                        setShowPassword((showPassword) => !showPassword)
+                      }
+                    >
+                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+              <Stack spacing={10} pt={2}>
+                <Button
+                  type="submit"
+                  loadingText="Submitting"
+                  size="lg"
+                  bg={"blue.400"}
+                  color={"white"}
+                  _hover={{
+                    bg: "blue.500",
+                  }}
+                >
+                  Sign up
+                </Button>
+              </Stack>
+              <Stack pt={6}>
+                <Text align={"center"}>
+                  Already a user?{" "}
+                  <Link href={route("login")} color={"blue.400"}>
+                    Login
+                  </Link>
+                </Text>
+              </Stack>
+            </Stack>
+          </form>
+        </Box>
+      </Stack>
+    </Flex>
   );
 }

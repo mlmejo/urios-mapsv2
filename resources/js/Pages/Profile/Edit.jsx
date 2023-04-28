@@ -1,40 +1,32 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import DeleteUserForm from "./Partials/DeleteUserForm";
-import UpdatePasswordForm from "./Partials/UpdatePasswordForm";
 import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationForm";
 import { Head } from "@inertiajs/react";
+import Navbar from "@/Components/Navbar";
+import { Box, SimpleGrid } from "@chakra-ui/react";
+import UserEstablishments from "./Partials/UserEstablishments";
 
-export default function Edit({ auth, mustVerifyEmail, status }) {
+export default function Edit({ auth, establishments }) {
   return (
-    <AuthenticatedLayout
-      user={auth.user}
-      header={
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          Profile
-        </h2>
-      }
-    >
+    <Navbar user={auth.user}>
       <Head title="Profile" />
 
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-          <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <UpdateProfileInformationForm
-              mustVerifyEmail={mustVerifyEmail}
-              status={status}
-              className="max-w-xl"
-            />
-          </div>
+      <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={4}>
+        <Box p={6} boxShadow="md" rounded="md">
+          <UpdateProfileInformationForm />
+        </Box>
 
-          <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <UpdatePasswordForm className="max-w-xl" />
-          </div>
-
-          <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <DeleteUserForm className="max-w-xl" />
-          </div>
-        </div>
-      </div>
-    </AuthenticatedLayout>
+        {auth.user.roles.some((role) => role.name === "admin") ? (
+          <></>
+        ) : (
+          <Box
+            gridColumn={{ lg: "2 / span 2" }}
+            boxShadow="md"
+            p={6}
+            rounded="md"
+          >
+            <UserEstablishments establishments={establishments} />
+          </Box>
+        )}
+      </SimpleGrid>
+    </Navbar>
   );
 }

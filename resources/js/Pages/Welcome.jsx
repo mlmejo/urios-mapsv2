@@ -46,6 +46,8 @@ export default function Welcome() {
           </Text>
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
             <Button
+              as="a"
+              href={route("register")}
               rounded={"full"}
               bg={"blue.400"}
               color={"white"}
@@ -55,7 +57,7 @@ export default function Welcome() {
             >
               Get Started
             </Button>
-            <Button rounded={"full"} paddingX={9}>
+            <Button as="a" href={route("login")} rounded={"full"} paddingX={9}>
               Login
             </Button>
           </Stack>

@@ -19,9 +19,15 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('Auth/Register');
+        $request->validate([
+            'isAdmin' => 'required|boolean',
+        ]);
+
+        return Inertia::render('Auth/Register', [
+            'isAdmin' => $request->isAdmin,
+        ]);
     }
 
     /**
@@ -33,7 +39,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:'.User::class,
+            'email' => 'required|string|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -41,6 +47,10 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+
+        $user->image()->create([
+            'path' => 'images/user_default.png'
         ]);
 
         event(new Registered($user));

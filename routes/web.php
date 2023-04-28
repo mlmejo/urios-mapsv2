@@ -1,7 +1,14 @@
 <?php
 
+use App\Http\Controllers\EstablishmentController;
+use App\Http\Controllers\EstablishmentLocationController;
+use App\Http\Controllers\EstablishmentReviewController;
+use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\ToggleEstablishmentStatusController;
+use App\Models\Establishment;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -17,22 +24,52 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return Inertia::render('Welcome');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+Route::get('/dashboard', function (Request $request) {
+    if (!$request->user()->roles->contains('name', 'admin')) {
+        return redirect()->route('map');
+    }
+
+    return Inertia::render('Dashboard', [
+        'establishments' => Establishment::with('user:id,name', 'location')->get(),
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/map', MapController::class)
+    ->middleware('auth')
+    ->name('map');
+
+Route::post('/establishments/{establishment}/status', ToggleEstablishmentStatusController::class)
+    ->middleware('auth')
+    ->name('establishments.toggle-status');
+
+Route::resource('establishments', EstablishmentController::class)
+    ->middleware('auth');
+
+Route::resource('establishments.locations', EstablishmentLocationController::class)
+    ->middleware('auth');
+
+Route::resource('establishments.reviews', EstablishmentReviewController::class)
+    ->middleware('auth');
+
+Route::get('/establishments/{establishment}/inquiries', [InquiryController::class, 'create'])
+    ->name('establishments.inquiries.create')
+    ->middleware('auth');
+
+Route::post('/establishments/{establishment}/inquiries', [InquiryController::class, 'store'])
+    ->name('establishments.inquiries.store')
+    ->middleware('auth');
+
+Route::resource('inquiries', InquiryController::class)
+    ->except(['create', 'store'])
+    ->middleware('auth');
+
+require __DIR__ . '/auth.php';
