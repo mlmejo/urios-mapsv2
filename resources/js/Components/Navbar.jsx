@@ -21,6 +21,7 @@ import PostMenuItem from "./PostMenuItem";
 const Links = [
   { label: "Dashboard", href: route("dashboard") },
   { label: "Map", href: route("map") },
+  { label: "My Establishments", href: route("my-establishments") },
   { label: "Establishments", href: route("establishments.index") },
   { label: "Inquiries", href: route("inquiries.index") },
 ];

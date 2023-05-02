@@ -9,7 +9,11 @@ class Establishment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'address', 'active'];
+    protected $fillable = [
+        'name', 'description', 'address',
+        'active', 'opening_time', 'closing_time',
+        'category'
+    ];
 
     public function user()
     {

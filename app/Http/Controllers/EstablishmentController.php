@@ -39,7 +39,10 @@ class EstablishmentController extends Controller
             'name' => 'required|string|max:255|unique:' . Establishment::class,
             'description' => 'required|string',
             'address' => 'required|string',
-            'image' => 'required|image'
+            'image' => 'required|image',
+            'opening_time' => 'required|string',
+            'closing_time' => 'required|string',
+            'opening_days' => 'required|string',
         ]);
 
         $establishment = $request->user()->establishments()
@@ -51,7 +54,7 @@ class EstablishmentController extends Controller
 
         $establishment->image()->create(compact('path'));
 
-        return redirect()->route('establishments.index');
+        return redirect()->route('my-establishments');
     }
 
     /**

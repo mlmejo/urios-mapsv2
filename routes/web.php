@@ -8,6 +8,7 @@ use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ToggleEstablishmentStatusController;
+use App\Http\Controllers\UserEstablishmentController;
 use App\Models\Establishment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -74,6 +75,13 @@ Route::resource('inquiries', InquiryController::class)
     ->middleware('auth');
 
 Route::resource('establishments.bookings', EstablishmentBookingController::class)
+    ->middleware('auth');
+
+Route::get('/my-establishments', [UserEstablishmentController::class, 'index'])
+    ->middleware('auth')
+    ->name('my-establishments');
+
+Route::post('/my-establishments', [UserEstablishmentController::class, 'store'])
     ->middleware('auth');
 
 require __DIR__ . '/auth.php';
