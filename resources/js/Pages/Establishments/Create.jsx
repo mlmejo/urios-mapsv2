@@ -19,7 +19,7 @@ import {
 import { useForm } from "@inertiajs/react";
 import { useState } from "react";
 
-export default function Create({ auth }) {
+export default function Create({ user }) {
   const { data, setData, post, errors } = useForm({
     name: "",
     address: "",
@@ -171,6 +171,7 @@ export default function Create({ auth }) {
               <Select
                 placeholder="Select option"
                 name="opening_days"
+                value={data.opening_days}
                 onChange={(e) => setData("opening_days", e.target.value)}
               >
                 <option value="MON-SAT">MON-SAT</option>
@@ -189,8 +190,13 @@ export default function Create({ auth }) {
                 name="category"
                 onChange={(e) => setData("category", e.target.value)}
               >
-                <option value="restaurant">Restaurant</option>
-                <option value="hotel">Hotel</option>
+                <option value="Restaurant">Restaurant</option>
+                <option value="Hotel">Hotel</option>
+                {user.roles.some((role) => role.name === "admin") ? (
+                  <option value="Tourist Spot">Tourist Spot</option>
+                ) : (
+                  <></>
+                )}
               </Select>
               {errors.category ? (
                 <FormErrorMessage>{errors.category}</FormErrorMessage>

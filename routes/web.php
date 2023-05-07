@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiEstablishmentInquriesController;
 use App\Http\Controllers\EstablishmentBookingController;
 use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\EstablishmentLocationController;
@@ -62,16 +63,7 @@ Route::resource('establishments.locations', EstablishmentLocationController::cla
 Route::resource('establishments.reviews', EstablishmentReviewController::class)
     ->middleware('auth');
 
-Route::get('/establishments/{establishment}/inquiries', [InquiryController::class, 'create'])
-    ->name('establishments.inquiries.create')
-    ->middleware('auth');
-
-Route::post('/establishments/{establishment}/inquiries', [InquiryController::class, 'store'])
-    ->name('establishments.inquiries.store')
-    ->middleware('auth');
-
 Route::resource('inquiries', InquiryController::class)
-    ->except(['create', 'store'])
     ->middleware('auth');
 
 Route::resource('establishments.bookings', EstablishmentBookingController::class)
@@ -83,5 +75,12 @@ Route::get('/my-establishments', [UserEstablishmentController::class, 'index'])
 
 Route::post('/my-establishments', [UserEstablishmentController::class, 'store'])
     ->middleware('auth');
+
+Route::get(
+    '/api/establishments/{establishment}/inquiries',
+    [ApiEstablishmentInquriesController::class, 'index']
+)
+    ->middleware('auth')
+    ->name('api.establishments.inquiries');
 
 require __DIR__ . '/auth.php';

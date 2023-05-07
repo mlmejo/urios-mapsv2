@@ -128,6 +128,7 @@ export default function Register({ isAdmin }) {
                       onClick={() =>
                         setShowPassword((showPassword) => !showPassword)
                       }
+                      tabIndex={-1}
                     >
                       {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                     </Button>
@@ -149,6 +150,7 @@ export default function Register({ isAdmin }) {
                       onClick={() =>
                         setShowPassword((showPassword) => !showPassword)
                       }
+                      tabIndex={-1}
                     >
                       {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                     </Button>

@@ -14,9 +14,16 @@ return new class extends Migration
         Schema::create('inquiries', function (Blueprint $table) {
             $table->id();
             $table->text('message');
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('sender_id');
+            $table->unsignedBigInteger('receiver_id');
             $table->foreignId('establishment_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
+
+            $table->foreign('sender_id')->references('id')->on('users')
+                ->constrained()->casacadeOnDelete();
+
+            $table->foreign('receiver_id')->references('id')->on('users')
+                ->constrained()->cascadeOnDelete();
         });
     }
 

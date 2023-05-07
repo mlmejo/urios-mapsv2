@@ -2,6 +2,8 @@ import Navbar from "@/Components/Navbar";
 import {
   Box,
   Card,
+  Flex,
+  HStack,
   Heading,
   Icon,
   Image,
@@ -11,7 +13,21 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Head } from "@inertiajs/react";
+import { FaUtensils } from "react-icons/fa";
 import { FiUser } from "react-icons/fi";
+import MessagesSection from "../Inquiries/Partials/MessagesSection";
+
+function renderEstablishmentIcon(category) {
+  switch (category) {
+    case "Restaurant":
+      return (
+        <HStack color={"orange"} alignItems={"center"} spacing={1}>
+          <FaUtensils />
+          <Text>Restaurant</Text>
+        </HStack>
+      );
+  }
+}
 
 export default function Index({ auth, establishments }) {
   return (
@@ -25,37 +41,61 @@ export default function Index({ auth, establishments }) {
               href={route("establishments.show", establishment.id)}
               key={establishment.id}
             >
-              <Card
-                marginBottom={{ base: "4", md: "0" }}
-                borderRadius="xl"
+              <Box
+                key={establishment.id}
+                bg="white"
+                borderRadius="md"
+                boxShadow="sm"
                 overflow="hidden"
-                _hover={{ boxShadow: "md" }}
-                transition="all 0.2s ease-in-out"
+                _hover={{
+                  shadow: "md",
+                }}
               >
                 <Image
-                  src={"/" + establishment.image.path}
-                  alt="Establishment Logo"
-                  borderRadius="none"
-                  boxSize="auto"
+                  src={establishment.image.path}
+                  alt="Establishment Image"
                   objectFit="cover"
-                  h="200px"
                   w="100%"
+                  h={{ base: "200px", md: "250px" }}
                 />
                 <Box p={4}>
-                  <Stack spacing="3">
-                    <Heading size="md" fontWeight="semibold">
-                      {establishment.name}
-                    </Heading>
-                    <Text noOfLines={4}>{establishment.description}</Text>
-                    <Stack direction="row" spacing="4" alignItems="center">
-                      <Icon as={FiUser} />
-                      <Text fontWeight="semibold">
-                        {establishment.user.name}
+                  <Flex justify={"space-between"} mb={2}>
+                    <Stack spacing={0}>
+                      <Heading size="md">{establishment.name}</Heading>
+                      <Text color="gray.400" fontSize="sm">
+                        {establishment.address}
                       </Text>
                     </Stack>
-                  </Stack>
+
+                    <Stack spacing={0}>
+                      {renderEstablishmentIcon(establishment.category)}
+                      <Text fontSize="sm" color="gray.400">
+                        {establishment.opening_days}
+                      </Text>
+
+                      <Text fontSize="sm" color="gray.400">
+                        {establishment.opening_time}
+                        {" - "}
+                        {establishment.closing_time}
+                      </Text>
+                    </Stack>
+                  </Flex>
+
+                  <Text color="gray.600" fontSize="sm" mb={2} noOfLines={5}>
+                    {establishment.description}
+                  </Text>
+
+                  <Flex
+                    alignItems="center"
+                    mt={4}
+                    justifyContent="space-between"
+                  >
+                    <Link href="#" fontWeight="bold" color="teal.500">
+                      View Details
+                    </Link>
+                  </Flex>
                 </Box>
-              </Card>
+              </Box>
             </Link>
           );
         })}

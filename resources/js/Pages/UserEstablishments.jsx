@@ -10,16 +10,30 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { Head } from "@inertiajs/react";
 import Create from "./Establishments/Create";
+import { FaUtensils } from "react-icons/fa";
+
+function renderEstablishmentIcon(category) {
+  switch (category) {
+    case "Restaurant":
+      return (
+        <HStack color={"orange"} alignItems={"center"} spacing={1}>
+          <FaUtensils />
+          <Text>Restaurant</Text>
+        </HStack>
+      );
+  }
+}
 
 export default function UserEstablishments({ auth, establishments }) {
   return (
     <Navbar user={auth.user}>
       <Head title="My Establishments" />
       <HStack alignItems={"start"}>
-        <Create />
+        <Create user={auth.user} />
         <Stack>
           <Heading as="h2" size="md">
             My Establishments
@@ -45,9 +59,29 @@ export default function UserEstablishments({ auth, establishments }) {
                     h={{ base: "200px", md: "250px" }}
                   />
                   <Box p={4}>
-                    <Heading size="md">{establishment.name}</Heading>
+                    <Flex justify={"space-between"} mb={2}>
+                      <Stack spacing={0}>
+                        <Heading size="md">{establishment.name}</Heading>
+                        <Text color="gray.400" fontSize="sm">
+                          {establishment.address}
+                        </Text>
+                      </Stack>
 
-                    <Text color="gray.600" fontSize="sm" mb={2}>
+                      <Stack spacing={0}>
+                        {renderEstablishmentIcon(establishment.category)}
+                        <Text fontSize="sm" color="gray.400">
+                          {establishment.opening_days}
+                        </Text>
+
+                        <Text fontSize="sm" color="gray.400">
+                          {establishment.opening_time}
+                          {" - "}
+                          {establishment.closing_time}
+                        </Text>
+                      </Stack>
+                    </Flex>
+
+                    <Text color="gray.600" fontSize="sm" mb={2} noOfLines={5}>
                       {establishment.description}
                     </Text>
 

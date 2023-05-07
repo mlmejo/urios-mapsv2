@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('opening_days');
             $table->time('opening_time');
             $table->time('closing_time');
-            $table->enum('category', ['restaurant', 'hotel']);
+            $table->enum('category', ['Restaurant', 'Hotel', 'Tourist Spot']);
         });
     }
 
