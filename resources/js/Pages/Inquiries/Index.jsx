@@ -81,7 +81,7 @@ export default function Index({ auth, establishment, inq, conversations }) {
                               {conversation.establishment.user.id !==
                               auth.user.id
                                 ? conversation.establishment.name
-                                : conversation.sender.name}
+                                : `${conversation.sender.name} (${conversation.establishment.name})`}
                             </Text>
                             <Text fontSize="xs">{conversation.message}</Text>
                           </Box>

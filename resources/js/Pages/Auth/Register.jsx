@@ -14,6 +14,7 @@ import {
   useColorModeValue,
   Link,
   FormErrorMessage,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -25,6 +26,7 @@ export default function Register({ isAdmin }) {
     email: isAdmin ? "admin@example.com" : "",
     password: "",
     password_confirmation: "",
+    role: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -32,6 +34,12 @@ export default function Register({ isAdmin }) {
   const handleChange = (e) => {
     setData(e.target.name, e.target.value);
   };
+
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    setData("role", checked ? "business owner" : "regular user");
+  }, [checked]);
 
   useEffect(() => {
     return () => {
@@ -157,6 +165,13 @@ export default function Register({ isAdmin }) {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
+              {!isAdmin ? (
+                <Checkbox onChange={(e) => setChecked(!checked)}>
+                  Are you a Business Owner?
+                </Checkbox>
+              ) : (
+                <></>
+              )}
               <Stack spacing={10} pt={2}>
                 <Button
                   type="submit"

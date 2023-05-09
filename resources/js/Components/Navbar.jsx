@@ -18,15 +18,44 @@ import {
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import PostMenuItem from "./PostMenuItem";
 
-const Links = [
-  { label: "Dashboard", href: route("dashboard") },
-  { label: "Map", href: route("map") },
-  { label: "My Establishments", href: route("my-establishments") },
-  { label: "Establishments", href: route("establishments.index") },
-  { label: "Inquiries", href: route("inquiries.index") },
+const AdminLinks = [
+  {
+    label: "Dashboard",
+    href: route("dashboard"),
+    active: route().current("dashboard"),
+  },
+  { label: "Map", href: route("map"), active: route().current("map") },
 ];
 
-const NavLink = ({ href, children }) => (
+const BusinessOwnerLinks = [
+  { label: "Map", href: route("map"), active: route().current("map") },
+  {
+    label: "My Establishments",
+    href: route("my-establishments"),
+    active: route().current("my-establishments"),
+  },
+  {
+    label: "Inquiries",
+    href: route("inquiries.index"),
+    active: route().current("inquiries.*"),
+  },
+];
+
+const RegularUserLinks = [
+  { label: "Map", href: route("map"), active: route().current("map") },
+  {
+    label: "Establishments",
+    href: route("establishments.index"),
+    active: route().current("establishments.*"),
+  },
+  {
+    label: "Inquiries",
+    href: route("inquiries.index"),
+    active: route().current("inquiries.*"),
+  },
+];
+
+const NavLink = ({ href, children, active }) => (
   <Link
     px={2}
     py={1}
@@ -36,6 +65,7 @@ const NavLink = ({ href, children }) => (
       bg: useColorModeValue("gray.200", "gray.700"),
     }}
     href={href ?? "#"}
+    fontWeight={active ? "bold" : "normal"}
   >
     {children}
   </Link>
@@ -44,9 +74,22 @@ const NavLink = ({ href, children }) => (
 export default function Navbar({ user, children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const bg = (role) => {
+    switch (role.name) {
+      case "admin":
+        return useColorModeValue("blue.100", "blue.900");
+      case "regular user":
+        return useColorModeValue("red.100", "red.900");
+      case "business owner":
+        return useColorModeValue("orange.100", "orange.900");
+      default:
+        return useColorModeValue("gray.100", "gray.900");
+    }
+  };
+
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box bg={bg(user.roles[0])} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -62,18 +105,42 @@ export default function Navbar({ user, children }) {
               spacing={4}
               display={{ base: "none", md: "flex" }}
             >
-              {Links.map((link) => {
-                if (
-                  link.label === "Dashboard" &&
-                  !user.roles.some((role) => role.name === "admin")
-                )
-                  return;
-                return (
-                  <NavLink key={link.label} href={link.href}>
-                    {link.label}
-                  </NavLink>
-                );
-              })}
+              {user.roles.some((role) => role.name === "admin") &&
+                AdminLinks.map((link) => {
+                  return (
+                    <NavLink
+                      key={link.label}
+                      href={link.href}
+                      active={link.active}
+                    >
+                      {link.label}
+                    </NavLink>
+                  );
+                })}
+              {user.roles.some((role) => role.name === "business owner") &&
+                BusinessOwnerLinks.map((link) => {
+                  return (
+                    <NavLink
+                      key={link.label}
+                      href={link.href}
+                      active={route().current() === link.href}
+                    >
+                      {link.label}
+                    </NavLink>
+                  );
+                })}
+              {user.roles.some((role) => role.name === "regular user") &&
+                RegularUserLinks.map((link) => {
+                  return (
+                    <NavLink
+                      key={link.label}
+                      href={link.href}
+                      active={route().current() === link.href}
+                    >
+                      {link.label}
+                    </NavLink>
+                  );
+                })}
             </HStack>
           </HStack>
           <Flex alignItems={"center"}>

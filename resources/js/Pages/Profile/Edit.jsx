@@ -10,24 +10,16 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import UserEstablishments from "./Partials/UserEstablishments";
+import Itirenaries from "./Partials/Itineraries";
 
-export default function Edit({ auth, establishments, bookings }) {
+export default function Edit({ auth, establishments, bookings, itineraries }) {
   return (
     <Navbar user={auth.user}>
       <Head title="Profile" />
 
-      <SimpleGrid columns={{ base: 1, lg: 4 }} spacing={4}>
+      <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={4}>
         <Box p={6} boxShadow="md" rounded="md">
           <UpdateProfileInformationForm />
-        </Box>
-        <Box
-          gridColumn={{ lg: "2 / span 2" }}
-          boxShadow="md"
-          p={6}
-          rounded="md"
-        >
-          <UserEstablishments establishments={establishments} />
         </Box>
         <Box boxShadow="md" p={6} rounded="md">
           <Heading size="md">Bookings</Heading>
@@ -65,6 +57,9 @@ export default function Edit({ auth, establishments, bookings }) {
               );
             })}
           </Stack>
+        </Box>
+        <Box w={"100%"} boxShadow={"md"} p={6} rounded={"md"}>
+          <Itirenaries itineraries={itineraries} />
         </Box>
       </SimpleGrid>
     </Navbar>

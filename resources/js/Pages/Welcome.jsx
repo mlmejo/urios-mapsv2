@@ -51,7 +51,7 @@ export default function Welcome() {
                 bg: "blue.500",
               }}
             >
-              Get Started
+              Register
             </Button>
             <Button as="a" href={route("login")} rounded={"full"} paddingX={9}>
               Login

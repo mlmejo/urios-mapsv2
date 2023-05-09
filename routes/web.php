@@ -6,6 +6,7 @@ use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\EstablishmentLocationController;
 use App\Http\Controllers\EstablishmentReviewController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\ItirenariesController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ToggleEstablishmentStatusController;
@@ -82,5 +83,14 @@ Route::get(
 )
     ->middleware('auth')
     ->name('api.establishments.inquiries');
+
+
+Route::get('/itineraries/create', [ItirenariesController::class, 'create'])
+    ->middleware('auth')
+    ->name('itineraries.create');
+
+Route::post('/itineraries', [ItirenariesController::class, 'store'])
+    ->middleware('auth')
+    ->name('itineraries.store');
 
 require __DIR__ . '/auth.php';

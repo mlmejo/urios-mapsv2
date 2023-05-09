@@ -44,4 +44,9 @@ class Establishment extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function itineraries()
+    {
+        return $this->belongsToMany(Itinerary::class);
+    }
 }

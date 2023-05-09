@@ -13,9 +13,9 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $default_roles = ['admin'];
+        $roleNames = ['admin', 'business owner', 'regular user'];
 
-        foreach ($default_roles as $roleName) {
+        foreach ($roleNames as $roleName) {
             DB::table('roles')->insert(['name' => $roleName]);
         }
     }
