@@ -90,7 +90,11 @@ export default function UserEstablishments({ auth, establishments }) {
                       mt={4}
                       justifyContent="space-between"
                     >
-                      <Link href="#" fontWeight="bold" color="teal.500">
+                      <Link
+                        href={route("establishments.show", establishment.id)}
+                        fontWeight="bold"
+                        color="teal.500"
+                      >
                         View Details
                       </Link>
 

@@ -76,14 +76,14 @@ export default function Navbar({ user, children }) {
 
   const bg = (role) => {
     switch (role.name) {
-      case "admin":
-        return useColorModeValue("blue.100", "blue.900");
-      case "regular user":
-        return useColorModeValue("red.100", "red.900");
       case "business owner":
-        return useColorModeValue("orange.100", "orange.900");
+        return useColorModeValue("blue.300", "blue.900");
+      case "admin":
+        return useColorModeValue("red.300", "red.900");
+      case "regular user":
+        return useColorModeValue("orange.300", "orange.900");
       default:
-        return useColorModeValue("gray.100", "gray.900");
+        return useColorModeValue("gray.300", "gray.900");
     }
   };
 

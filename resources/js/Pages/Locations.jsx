@@ -1,5 +1,5 @@
 import Navbar from "@/Components/Navbar";
-import { Button, Image } from "@chakra-ui/react";
+import { Button, Image, Text } from "@chakra-ui/react";
 import { Head } from "@inertiajs/react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -11,6 +11,19 @@ mapboxgl.accessToken =
 
 export default function Locations({ auth, establishments }) {
   const [popupEstablishment, setPopupEstablishment] = useState(null);
+
+  const markerBorder = (establishment) => {
+    switch (establishment.category) {
+      case "Restaurant":
+        return "orange.500";
+
+      case "Hotel":
+        return "blue.500";
+
+      case "Tourist Spot":
+        return "green.500";
+    }
+  };
 
   return (
     <Navbar user={auth.user}>
@@ -35,10 +48,21 @@ export default function Locations({ auth, establishments }) {
                 latitude={establishment.location.latitude}
                 onClick={() => setPopupEstablishment(establishment)}
               >
+                <Text
+                  textAlign="center"
+                  background={markerBorder(establishment)}
+                  p="1"
+                  rounded="3px"
+                  color="white"
+                >
+                  {establishment.name}
+                </Text>
                 <Image
                   src={`/${establishment.image.path}`}
                   rounded="full"
                   boxSize="100"
+                  border="4px"
+                  borderColor={markerBorder(establishment)}
                 />
               </Marker>
             </div>
