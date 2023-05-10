@@ -28,8 +28,8 @@ export default function CoordinatesFormModal({
 
   useEffect(() => {
     setData({
-      longitude: establishment ? establishment.location.longitude : 0.0,
-      latitude: establishment ? establishment.location.latitude : 0.0,
+      longitude: establishment && establishment.location ? establishment.location.longitude : 0.0,
+      latitude: establishment && establishment.location ? establishment.location.latitude : 0.0,
     });
   }, [establishment]);
 
