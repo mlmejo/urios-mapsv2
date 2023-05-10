@@ -36,7 +36,7 @@ export default function Locations({ auth, establishments }) {
           zoom: 15.0,
         }}
         style={{ height: "100vh" }}
-        mapStyle="mapbox://styles/id-balaba/clg8y6wio006101o5ckmybywp"
+        mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxAccessToken="pk.eyJ1IjoiaWQtYmFsYWJhIiwiYSI6ImNrbGhkejZuZzVlY3AzMXBsdnVvZnZwcmwifQ.8UcxPw97_UxuaLNakAjbdA"
       >
         <NavigationControl />
