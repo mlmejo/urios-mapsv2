@@ -31,6 +31,7 @@ class ProfileController extends Controller
             })
                 ->with('user.image', 'establishment')
                 ->get(),
+            'itineraries' => $request->user()->itineraries->load('establishments'),
         ]);
     }
 

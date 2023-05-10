@@ -9,10 +9,15 @@ class Inquiry extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message'];
+    protected $fillable = ['message', 'sender_id', 'receiver_id', 'establishment_id'];
 
 
-    public function user()
+    public function sender()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function receiver()
     {
         return $this->belongsTo(User::class);
     }

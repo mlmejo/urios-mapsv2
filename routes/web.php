@@ -1,13 +1,16 @@
 <?php
 
+use App\Http\Controllers\ApiEstablishmentInquriesController;
 use App\Http\Controllers\EstablishmentBookingController;
 use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\EstablishmentLocationController;
 use App\Http\Controllers\EstablishmentReviewController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\ItirenariesController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ToggleEstablishmentStatusController;
+use App\Http\Controllers\UserEstablishmentController;
 use App\Models\Establishment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -61,19 +64,33 @@ Route::resource('establishments.locations', EstablishmentLocationController::cla
 Route::resource('establishments.reviews', EstablishmentReviewController::class)
     ->middleware('auth');
 
-Route::get('/establishments/{establishment}/inquiries', [InquiryController::class, 'create'])
-    ->name('establishments.inquiries.create')
-    ->middleware('auth');
-
-Route::post('/establishments/{establishment}/inquiries', [InquiryController::class, 'store'])
-    ->name('establishments.inquiries.store')
-    ->middleware('auth');
-
 Route::resource('inquiries', InquiryController::class)
-    ->except(['create', 'store'])
     ->middleware('auth');
 
 Route::resource('establishments.bookings', EstablishmentBookingController::class)
     ->middleware('auth');
+
+Route::get('/my-establishments', [UserEstablishmentController::class, 'index'])
+    ->middleware('auth')
+    ->name('my-establishments');
+
+Route::post('/my-establishments', [UserEstablishmentController::class, 'store'])
+    ->middleware('auth');
+
+Route::get(
+    '/api/establishments/{establishment}/inquiries',
+    [ApiEstablishmentInquriesController::class, 'index']
+)
+    ->middleware('auth')
+    ->name('api.establishments.inquiries');
+
+
+Route::get('/itineraries/create', [ItirenariesController::class, 'create'])
+    ->middleware('auth')
+    ->name('itineraries.create');
+
+Route::post('/itineraries', [ItirenariesController::class, 'store'])
+    ->middleware('auth')
+    ->name('itineraries.store');
 
 require __DIR__ . '/auth.php';

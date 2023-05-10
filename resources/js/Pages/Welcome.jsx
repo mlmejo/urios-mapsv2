@@ -34,15 +34,11 @@ export default function Welcome() {
               Maps
             </Text>
             <br />{" "}
-            <Text color={"blue.400"} as={"span"}>
-              Lorem Ipsum
-            </Text>{" "}
           </Heading>
           <Text fontSize={{ base: "md", lg: "lg" }} color={"gray.500"}>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum
-            excepturi ducimus, perspiciatis ab quibusdam quasi repudiandae animi
-            magni quae sit perferendis, beatae sint dolorem quaerat recusandae.
-            Alias eum sunt animi?
+            A web application that will help and promote the domestic tourism of
+            Butuan City and serve as a tool to cope with the effects of the
+            COVID-19 pandemic on the tourism sector.
           </Text>
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
             <Button
@@ -55,9 +51,9 @@ export default function Welcome() {
                 bg: "blue.500",
               }}
             >
-              Get Started
+              Register
             </Button>
-            <Button as="a" href={route("login")} rounded={"full"} paddingX={9}>
+            <Button as="a" href={route("login")} rounded={"full"} paddingX={6}>
               Login
             </Button>
           </Stack>

@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('locations', function (Blueprint $table) {
-            $table->id();
-            $table->decimal('longitude')->nullable();
-            $table->decimal('latitude')->nullable();
+        Schema::create('establishment_itinerary', function (Blueprint $table) {
+            $table->foreignId('itinerary_id')->constrained()->cascadeOnDelete();
             $table->foreignId('establishment_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('establishment_itirenary');
     }
 };

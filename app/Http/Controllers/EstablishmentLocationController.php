@@ -10,8 +10,8 @@ class EstablishmentLocationController extends Controller
     public function store(Request $request, Establishment $establishment)
     {
         $validated = $request->validate([
-            'longitude' => 'required|decimal:1,8',
-            'latitude' => 'required|decimal:1,8',
+            'longitude' => 'required',
+            'latitude' => 'required',
         ]);
 
         $establishment->location()->update($validated);

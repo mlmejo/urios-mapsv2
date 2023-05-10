@@ -9,7 +9,11 @@ class Establishment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'address', 'active'];
+    protected $fillable = [
+        'name', 'description', 'address',
+        'active', 'opening_time', 'closing_time',
+        'category', 'opening_days',
+    ];
 
     public function user()
     {
@@ -39,5 +43,10 @@ class Establishment extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function itineraries()
+    {
+        return $this->belongsToMany(Itinerary::class);
     }
 }

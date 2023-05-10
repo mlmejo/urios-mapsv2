@@ -10,21 +10,28 @@ import {
 import { useForm } from "@inertiajs/react";
 
 export default function MessagesSection({ user, establishment, inquiries }) {
-  const { data, setData, post } = useForm({
+  const { data, setData, post, reset } = useForm({
     message: "",
   });
 
   const submit = (e) => {
     e.preventDefault();
 
-    post(route("establishments.inquiries.store", establishment.id));
+    post(
+      route("inquiries.store", {
+        establishment: establishment.id,
+      }),
+      {
+        onSuccess: () => reset(),
+      }
+    );
   };
 
   return (
     <Flex
       direction="column"
       grow={1}
-      height="100%"
+      height="87%"
       data-testid="message-section"
     >
       <Box bg="white" flex="1" boxShadow="md" overflowY="scroll">
@@ -34,12 +41,45 @@ export default function MessagesSection({ user, establishment, inquiries }) {
         <Stack p={4} spacing={4}>
           {inquiries &&
             inquiries.map((inquiry) => {
-              if (inquiry.establishment_id !== establishment.id) {
+              if (inquiry.receiver.id == inquiry.sender.id) {
+                return (
+                  <>
+                    <Flex key={inquiry.id} alignItems="center" mb={2}>
+                      <Avatar
+                        name={inquiry.receiver.name}
+                        src={"/" + inquiry.receiver.image.path}
+                        size="sm"
+                        mr={2}
+                      />
+                      <Box bg="gray.100" borderRadius="md" p={2}>
+                        <Text>{inquiry.message}</Text>
+                      </Box>
+                    </Flex>
+                    <Flex
+                      key={inquiry.id}
+                      alignItems="center"
+                      justify="flex-end"
+                    >
+                      <Box bg="teal.500" borderRadius="md" p={2} color="white">
+                        <Text>{inquiry.message}</Text>
+                      </Box>
+                      <Avatar
+                        name={inquiry.sender.name}
+                        src={"/" + inquiry.sender.image.path}
+                        size="sm"
+                        ml={2}
+                      />
+                    </Flex>
+                  </>
+                );
+              }
+
+              if (inquiry.receiver.id === user.id) {
                 return (
                   <Flex key={inquiry.id} alignItems="center" mb={2}>
                     <Avatar
-                      name={inquiry.establishment.name}
-                      src={"/" + inquiry.establishment.image.path}
+                      name={inquiry.receiver.name}
+                      src={"/" + inquiry.receiver.image.path}
                       size="sm"
                       mr={2}
                     />
@@ -55,8 +95,8 @@ export default function MessagesSection({ user, establishment, inquiries }) {
                       <Text>{inquiry.message}</Text>
                     </Box>
                     <Avatar
-                      name={user.name}
-                      src={"/" + user.image.path}
+                      name={inquiry.sender.name}
+                      src={"/" + inquiry.sender.image.path}
                       size="sm"
                       ml={2}
                     />

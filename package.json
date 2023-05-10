@@ -24,6 +24,7 @@
         "@chakra-ui/react": "^2.6.0",
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
+        "chakra-react-select": "^4.6.0",
         "framer-motion": "^10.12.4",
         "mapbox-gl": "^2.14.1",
         "react-icons": "^4.8.0",
