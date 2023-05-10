@@ -53,7 +53,7 @@ export default function Welcome() {
             >
               Register
             </Button>
-            <Button as="a" href={route("login")} rounded={"full"} paddingX={9}>
+            <Button as="a" href={route("login")} rounded={"full"} paddingX={6}>
               Login
             </Button>
           </Stack>
