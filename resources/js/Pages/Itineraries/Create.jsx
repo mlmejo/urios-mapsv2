@@ -1,5 +1,15 @@
 import Navbar from "@/Components/Navbar";
-import { Box, Button, Flex, HStack, Heading, Image, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Heading,
+  Image,
+  SimpleGrid,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { Head, useForm } from "@inertiajs/react";
 import { Select } from "chakra-react-select";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -12,18 +22,18 @@ export default function Locations({ auth, establishments }) {
     longitude: 125.5172,
     latitude: 8.9422,
     zoom: 15.0,
-  })
+  });
 
   const renderPrice = (establishment) => {
     switch (establishment.pricing) {
       case "low":
-        return 1
+        return 1;
       case "medium":
-        return 2
+        return 2;
       case "high":
-        return 3
+        return 3;
     }
-  }
+  };
 
   const markerBorder = (establishment) => {
     switch (establishment.category) {
@@ -41,8 +51,8 @@ export default function Locations({ auth, establishments }) {
   const [price, setPrice] = useState(0);
 
   const { data, setData, post, reset } = useForm({
-    "establishments": [],
-    "price": 0,
+    establishments: [],
+    price: 0,
   });
 
   useEffect(() => {
@@ -51,60 +61,33 @@ export default function Locations({ auth, establishments }) {
 
   const submit = () => {
     post(route("itineraries.store"), { onSuccess: () => reset() });
-  }
+  };
 
   return (
     <Navbar user={auth.user}>
       <Head title="Map" />
       <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={4}>
-        <Box padding={6}>
-          <Flex flexDirection={{ base: "column", lg: "row" }} justifyContent={{ base: "left", lg: "space-between" }}>
-            <Heading size="md" mb={4}>Create Itinerary</Heading>
-            <Text><strong>Estimated Budget Allotment: ₱{price}</strong></Text>
-          </Flex>
-          <Box maxHeight={500} overflow={"auto"}>
-            {data.establishments.map((establishment) => {
-              return <Stack key={establishment.id} bg="gray.100" p={6} rounded="md" mb={4}>
-                <Box>
-                  <Flex alignItems="center" justifyContent="space-between">
-                    <Text>
-                      <strong>Establishment</strong>:
-                    </Text>
-                    <Box _hover={{ border: "2px solid gray", rounded: "md" }}>
-                      <FaTimes onClick={() => {
-                        setData("establishments", data.establishments.filter((e) => e.id !== establishment.id));
-                        setPrice(() => price - renderPrice(establishment) * 150);
-                      }} />
-                    </Box>
-                  </Flex>
-                  {establishment.name}
-                </Box>
-                <Text>
-                  <strong>Pricing</strong>: <br />
-                  ₱{renderPrice(establishment) * 150}
-                </Text>
-              </Stack>
-            })}
-          </Box>
-          <Flex justifyContent="flex-end">
-            <Button colorScheme="blue" onClick={submit}>Confirm</Button>
-          </Flex>
-        </Box>
         <Stack gridColumn={"span 2"}>
           <Box mb={4}>
-            <Select placeholder="Search an establishment" options={establishments.map((e) => {
-              return {
-                label: e.name,
-                value: e.id,
-              }
-            })} onChange={(e) => {
-              const establishment = establishments.find((obj) => obj.id === e.value);
-              setViewState({
-                ...viewState,
-                longitude: establishment.location.longitude,
-                latitude: establishment.location.latitude,
-              })
-            }} />
+            <Select
+              placeholder="Search an establishment"
+              options={establishments.map((e) => {
+                return {
+                  label: e.name,
+                  value: e.id,
+                };
+              })}
+              onChange={(e) => {
+                const establishment = establishments.find(
+                  (obj) => obj.id === e.value
+                );
+                setViewState({
+                  ...viewState,
+                  longitude: establishment.location.longitude,
+                  latitude: establishment.location.latitude,
+                });
+              }}
+            />
           </Box>
 
           <Map
@@ -123,7 +106,10 @@ export default function Locations({ auth, establishments }) {
                     latitude={parseFloat(establishment.location.latitude)}
                     onClick={() => {
                       if (data.establishments.includes(establishment)) return;
-                      setData("establishments", [...data.establishments, establishment]);
+                      setData("establishments", [
+                        ...data.establishments,
+                        establishment,
+                      ]);
                       setPrice(() => price + renderPrice(establishment) * 150);
                     }}
                   >
@@ -146,21 +132,67 @@ export default function Locations({ auth, establishments }) {
                 </div>
               );
             })}
-            {/* {popupEstablishment ? (
-          <Popup
-            longitude={popupEstablishment.location.longitude}
-            latitude={popupEstablishment.location.latitude}
-            onClose={() => setPopupEstablishment(null)}
-            closeOnClick={false}
-            offset={40}
-          >
-            {popupEstablishment.name}
-          </Popup>
-        ) : (
-          <></>
-        )} */}
           </Map>
         </Stack>
+        <Box padding={6}>
+          <Flex
+            flexDirection={{ base: "column", lg: "row" }}
+            justifyContent={{ base: "left", lg: "space-between" }}
+          >
+            <Heading size="md" mb={4}>
+              Create Itinerary
+            </Heading>
+            <Text>
+              <strong>Estimated Budget Allotment: ₱{price}</strong>
+            </Text>
+          </Flex>
+          <Box maxHeight={500} overflow={"auto"}>
+            {data.establishments.map((establishment) => {
+              return (
+                <Stack
+                  key={establishment.id}
+                  bg="gray.100"
+                  p={6}
+                  rounded="md"
+                  mb={4}
+                >
+                  <Box>
+                    <Flex alignItems="center" justifyContent="space-between">
+                      <Text>
+                        <strong>Establishment</strong>:
+                      </Text>
+                      <Box _hover={{ border: "2px solid gray", rounded: "md" }}>
+                        <FaTimes
+                          onClick={() => {
+                            setData(
+                              "establishments",
+                              data.establishments.filter(
+                                (e) => e.id !== establishment.id
+                              )
+                            );
+                            setPrice(
+                              () => price - renderPrice(establishment) * 150
+                            );
+                          }}
+                        />
+                      </Box>
+                    </Flex>
+                    {establishment.name}
+                  </Box>
+                  <Text>
+                    <strong>Pricing</strong>: <br />₱
+                    {renderPrice(establishment) * 150}
+                  </Text>
+                </Stack>
+              );
+            })}
+          </Box>
+          <Flex justifyContent="flex-end">
+            <Button colorScheme="blue" onClick={submit}>
+              Confirm
+            </Button>
+          </Flex>
+        </Box>
       </SimpleGrid>
     </Navbar>
   );

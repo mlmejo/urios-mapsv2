@@ -15,7 +15,7 @@ export default function Locations({ auth, establishments }) {
     longitude: 125.5172,
     latitude: 8.9422,
     zoom: 15.0,
-  })
+  });
 
   const markerBorder = (establishment) => {
     switch (establishment.category) {
@@ -35,19 +35,27 @@ export default function Locations({ auth, establishments }) {
       <Head title="Map" />
 
       <Box mb={4}>
-        <Select placeholder="Search an establishment" isSearchable isClearable options={establishments.map((e) => {
-          return {
-            label: e.name,
-            value: e.id,
-          }
-        })} onChange={(e) => {
-          const establishment = establishments.find((obj) => obj.id === e.value);
-          setViewState({
-            ...viewState,
-            longitude: establishment.location.longitude,
-            latitude: establishment.location.latitude,
-          })
-        }} />
+        <Select
+          placeholder="Search an establishment"
+          isSearchable
+          isClearable
+          options={establishments.map((e) => {
+            return {
+              label: e.name,
+              value: e.id,
+            };
+          })}
+          onChange={(e) => {
+            const establishment = establishments.find(
+              (obj) => obj.id === e.value
+            );
+            setViewState({
+              ...viewState,
+              longitude: establishment.location.longitude,
+              latitude: establishment.location.latitude,
+            });
+          }}
+        />
       </Box>
 
       <Map
@@ -58,19 +66,23 @@ export default function Locations({ auth, establishments }) {
         onMove={(e) => setViewState(e.viewState)}
       >
         <NavigationControl />
-        <Stack bg={"white"} p={4} m={6} position={"fixed"} fontSize={"large"} rounded="md">
+        <Stack
+          bg={"white"}
+          p={4}
+          m={6}
+          position={"fixed"}
+          fontSize={"large"}
+          rounded="md"
+        >
           <strong>Legend</strong>:
-
           <Flex alignItems="center">
             <FaUtensils color="orange" />
             <Text ml={2}>Restaurant</Text>
           </Flex>
-
           <Flex alignItems="center">
             <FaBuilding color="blue" />
             <Text ml={2}>Hotel</Text>
           </Flex>
-
           <Flex alignItems="center">
             <FaCamera color="green" />
             <Text ml={2}>Tourist Spot</Text>

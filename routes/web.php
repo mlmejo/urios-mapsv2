@@ -5,6 +5,7 @@ use App\Http\Controllers\EstablishmentBookingController;
 use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\EstablishmentLocationController;
 use App\Http\Controllers\EstablishmentReviewController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\ItirenariesController;
 use App\Http\Controllers\MapController;
@@ -92,5 +93,8 @@ Route::get('/itineraries/create', [ItirenariesController::class, 'create'])
 Route::post('/itineraries', [ItirenariesController::class, 'store'])
     ->middleware('auth')
     ->name('itineraries.store');
+
+Route::get('/guest', [GuestController::class, 'index'])
+    ->name('guest.index');
 
 require __DIR__ . '/auth.php';
