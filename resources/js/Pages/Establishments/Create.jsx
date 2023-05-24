@@ -20,7 +20,7 @@ import { useForm } from "@inertiajs/react";
 import { useState } from "react";
 
 export default function Create({ user }) {
-  const { data, setData, post, errors } = useForm({
+  const { data, setData, post, errors, reset } = useForm({
     name: "",
     address: "",
     opening_time: "",
@@ -45,7 +45,7 @@ export default function Create({ user }) {
   const submit = (e) => {
     e.preventDefault();
 
-    post(route("establishments.store"));
+    post(route("establishments.store"), { onSuccess: () => reset() });
   };
 
   return (
