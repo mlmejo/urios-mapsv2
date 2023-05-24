@@ -59,6 +59,17 @@ export default function Guest({ establishments }) {
     }
   };
 
+  function renderPrice(pricing) {
+    switch (pricing) {
+      case "low":
+        return "₱";
+      case "medium":
+        return "₱₱";
+      case "high":
+        return "₱₱₱";
+    }
+  }
+
   const [price, setPrice] = useState(0);
 
   const { data, setData, post, reset } = useForm({
