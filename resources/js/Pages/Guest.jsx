@@ -16,6 +16,7 @@ import {
   useDisclosure,
   SimpleGrid,
   Heading,
+  Image,
 } from "@chakra-ui/react";
 import {
   HamburgerIcon,
