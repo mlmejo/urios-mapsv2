@@ -25,7 +25,7 @@ import {
 } from "@chakra-ui/icons";
 import { Select } from "chakra-react-select";
 import { useEffect, useRef, useState } from "react";
-import { Map, NavigationControl } from "react-map-gl";
+import { Map, Marker, NavigationControl } from "react-map-gl";
 import { FaBuilding, FaCamera, FaUtensils } from "react-icons/fa";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Head, useForm } from "@inertiajs/react";
