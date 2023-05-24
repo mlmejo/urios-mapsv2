@@ -91,7 +91,8 @@ export default function Dashboard({ auth, establishments }) {
                         textColor="blue"
                         onClick={() => handleOpen(establishment)}
                       >
-                        View Coordinates
+                        {establishment.location.longitude ? establishment.location.longitude : 0.0},
+                        {establishment.location.latitude ? establishment.location.latitude : 0.0}
                       </Link>
                     </Td>
                     <Td>

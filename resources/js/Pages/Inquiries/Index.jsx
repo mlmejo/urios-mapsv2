@@ -4,28 +4,29 @@ import { Head, useForm } from "@inertiajs/react";
 import MessagesSection from "./Partials/MessagesSection";
 import { useEffect, useState } from "react";
 
-export default function Index({ auth, establishment, inq, conversations }) {
+export default function Index({ auth, establishment, inq, conversations, t }) {
+
   const [inquiries, setInquiries] = useState(inq);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         route("api.establishments.inquiries", establishment.id)
-  //       );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          route("api.establishments.inquiries", [establishment.id, { t: t.id }])
+        );
 
-  //       setInquiries(response.data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+        setInquiries(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  //   fetchData();
+    fetchData();
 
-  //   const intervalId = setInterval(fetchData, 1000);
+    const intervalId = setInterval(fetchData, 1000);
 
-  //   return () => clearInterval(intervalId);
-  // }, []);
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <Navbar user={auth.user}>
@@ -50,6 +51,14 @@ export default function Index({ auth, establishment, inq, conversations }) {
                     )
                 )
                 .map((conversation) => {
+                  var target = null;
+
+                  if (conversation.sender_id == auth.user.id) {
+                    target = conversation.receiver_id;
+                  } else if (conversation.receiver_id == auth.user.id) {
+                    target = conversation.sender_id;
+                  }
+
                   return (
                     <Box
                       key={conversation.id}
@@ -62,6 +71,7 @@ export default function Index({ auth, establishment, inq, conversations }) {
                       <Link
                         href={route("inquiries.create", {
                           establishment: conversation.establishment.id,
+                          t: target
                         })}
                       >
                         <Flex alignItems="center">
@@ -69,7 +79,7 @@ export default function Index({ auth, establishment, inq, conversations }) {
                             name="#"
                             src={
                               conversation.establishment.user.id !==
-                              auth.user.id
+                                auth.user.id
                                 ? "/" + conversation.establishment.image.path
                                 : "/" + conversation.sender.image.path
                             }
@@ -79,7 +89,7 @@ export default function Index({ auth, establishment, inq, conversations }) {
                           <Box>
                             <Text fontWeight="bold" fontSize="sm">
                               {conversation.establishment.user.id !==
-                              auth.user.id
+                                auth.user.id
                                 ? conversation.establishment.name
                                 : `${conversation.sender.name} (${conversation.establishment.name})`}
                             </Text>
@@ -96,6 +106,7 @@ export default function Index({ auth, establishment, inq, conversations }) {
           {establishment ? (
             <MessagesSection
               user={auth.user}
+              t={t}
               establishment={establishment}
               inquiries={inquiries}
             />

@@ -11,7 +11,7 @@ class ItirenariesController extends Controller
     public function create()
     {
         return Inertia::render('Itineraries/Create', [
-            'establishments' => Establishment::all(),
+            'establishments' => Establishment::with('image', 'location')->get(),
         ]);
     }
 
@@ -19,11 +19,14 @@ class ItirenariesController extends Controller
     {
         $request->validate([
             'establishments' => 'required|array',
+            'price' => 'required',
         ]);
 
         $establishments = Establishment::findMany($request->establishments);
 
-        $itinerary = $request->user()->itineraries()->create();
+        $itinerary = $request->user()->itineraries()->create([
+            'price' => $request->price,
+        ]);
 
         $itinerary->establishments()->sync($establishments);
 

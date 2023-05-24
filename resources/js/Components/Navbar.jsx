@@ -123,7 +123,7 @@ export default function Navbar({ user, children }) {
                     <NavLink
                       key={link.label}
                       href={link.href}
-                      active={route().current() === link.href}
+                      active={link.active}
                     >
                       {link.label}
                     </NavLink>
@@ -135,7 +135,7 @@ export default function Navbar({ user, children }) {
                     <NavLink
                       key={link.label}
                       href={link.href}
-                      active={route().current() === link.href}
+                      active={link.active}
                     >
                       {link.label}
                     </NavLink>
@@ -168,18 +168,42 @@ export default function Navbar({ user, children }) {
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
-              {Links.map((link) => {
-                if (
-                  link.label === "Dashboard" &&
-                  !user.roles.some((role) => role.name === "admin")
-                )
-                  return;
-                return (
-                  <NavLink key={link.label} href={link.href}>
-                    {link.label}
-                  </NavLink>
-                );
-              })}
+              {user.roles.some((role) => role.name === "admin") &&
+                AdminLinks.map((link) => {
+                  return (
+                    <NavLink
+                      key={link.label}
+                      href={link.href}
+                      active={link.active}
+                    >
+                      {link.label}
+                    </NavLink>
+                  );
+                })}
+              {user.roles.some((role) => role.name === "business owner") &&
+                BusinessOwnerLinks.map((link) => {
+                  return (
+                    <NavLink
+                      key={link.label}
+                      href={link.href}
+                      active={link.active}
+                    >
+                      {link.label}
+                    </NavLink>
+                  );
+                })}
+              {user.roles.some((role) => role.name === "regular user") &&
+                RegularUserLinks.map((link) => {
+                  return (
+                    <NavLink
+                      key={link.label}
+                      href={link.href}
+                      active={link.active}
+                    >
+                      {link.label}
+                    </NavLink>
+                  );
+                })}
             </Stack>
           </Box>
         ) : null}

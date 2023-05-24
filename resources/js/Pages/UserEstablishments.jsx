@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Head } from "@inertiajs/react";
 import Create from "./Establishments/Create";
-import { FaUtensils } from "react-icons/fa";
+import { FaBuilding, FaCamera, FaUtensils } from "react-icons/fa";
 
 function renderEstablishmentIcon(category) {
   switch (category) {
@@ -25,6 +25,20 @@ function renderEstablishmentIcon(category) {
           <Text>Restaurant</Text>
         </HStack>
       );
+    case "Hotel":
+      return (
+        <HStack color={"blue"} alignItems={"center"} spacing={1}>
+          <FaBuilding />
+          <Text>Hotel</Text>
+        </HStack>
+      );
+    case "Tourist Spot":
+      return (
+        <HStack color={"green"} alignItems={"center"} spacing={1}>
+          <FaCamera />
+          <Text>Tourist Spot</Text>
+        </HStack>
+      )
   }
 }
 

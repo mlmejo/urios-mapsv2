@@ -192,14 +192,27 @@ export default function Create({ user }) {
               >
                 <option value="Restaurant">Restaurant</option>
                 <option value="Hotel">Hotel</option>
-                {user.roles.some((role) => role.name === "admin") ? (
-                  <option value="Tourist Spot">Tourist Spot</option>
-                ) : (
-                  <></>
-                )}
+                <option value="Tourist Spot">Tourist Spot</option>
               </Select>
               {errors.category ? (
                 <FormErrorMessage>{errors.category}</FormErrorMessage>
+              ) : (
+                <></>
+              )}
+            </FormControl>
+            <FormControl id="pricing" isRequired>
+              <FormLabel>Pricing</FormLabel>
+              <Select
+                placeholder="Select option"
+                name="pricing"
+                onChange={(e) => setData("pricing", e.target.value)}
+              >
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </Select>
+              {errors.pricing ? (
+                <FormErrorMessage>{errors.pricing}</FormErrorMessage>
               ) : (
                 <></>
               )}

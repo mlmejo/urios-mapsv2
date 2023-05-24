@@ -13,6 +13,6 @@ class ToggleEstablishmentStatusController extends Controller
             'active' => !$establishment->active,
         ]);
 
-        return response()->json(Establishment::with('user:id,name,email')->get());
+        return response()->json(Establishment::with('user:id,name,email', 'location')->get());
     }
 }

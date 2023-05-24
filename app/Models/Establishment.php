@@ -12,7 +12,7 @@ class Establishment extends Model
     protected $fillable = [
         'name', 'description', 'address',
         'active', 'opening_time', 'closing_time',
-        'category', 'opening_days',
+        'category', 'opening_days', 'pricing',
     ];
 
     public function user()

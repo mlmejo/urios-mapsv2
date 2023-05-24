@@ -9,6 +9,8 @@ class Itinerary extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['price'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -1,16 +1,21 @@
 import Navbar from "@/Components/Navbar";
-import { Button, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Stack, Text } from "@chakra-ui/react";
 import { Head } from "@inertiajs/react";
+import { Select } from "chakra-react-select";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useEffect, useState } from "react";
-import Map, { Marker, NavigationControl, Popup } from "react-map-gl";
-
-mapboxgl.accessToken =
-  "pk.eyJ1IjoiaWQtYmFsYWJhIiwiYSI6ImNrbGhkejZuZzVlY3AzMXBsdnVvZnZwcmwifQ.8UcxPw97_UxuaLNakAjbdA";
+import { useState } from "react";
+import { FaBuilding, FaCamera, FaUtensils } from "react-icons/fa";
+import Map, { Marker, NavigationControl } from "react-map-gl";
 
 export default function Locations({ auth, establishments }) {
   const [popupEstablishment, setPopupEstablishment] = useState(null);
+
+  const [viewState, setViewState] = useState({
+    longitude: 125.5172,
+    latitude: 8.9422,
+    zoom: 15.0,
+  })
 
   const markerBorder = (establishment) => {
     switch (establishment.category) {
@@ -29,27 +34,57 @@ export default function Locations({ auth, establishments }) {
     <Navbar user={auth.user}>
       <Head title="Map" />
 
+      <Box mb={4}>
+        <Select placeholder="Search an establishment" isSearchable isClearable options={establishments.map((e) => {
+          return {
+            label: e.name,
+            value: e.id,
+          }
+        })} onChange={(e) => {
+          const establishment = establishments.find((obj) => obj.id === e.value);
+          setViewState({
+            ...viewState,
+            longitude: establishment.location.longitude,
+            latitude: establishment.location.latitude,
+          })
+        }} />
+      </Box>
+
       <Map
-        initialViewState={{
-          longitude: 125.5172,
-          latitude: 8.9422,
-          zoom: 15.0,
-        }}
+        {...viewState}
         style={{ height: "100vh" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxAccessToken="pk.eyJ1IjoiaWQtYmFsYWJhIiwiYSI6ImNrbGhkejZuZzVlY3AzMXBsdnVvZnZwcmwifQ.8UcxPw97_UxuaLNakAjbdA"
+        onMove={(e) => setViewState(e.viewState)}
       >
         <NavigationControl />
+        <Stack bg={"white"} p={4} m={6} position={"fixed"} fontSize={"large"} rounded="md">
+          <strong>Legend</strong>:
+
+          <Flex alignItems="center">
+            <FaUtensils color="orange" />
+            <Text ml={2}>Restaurant</Text>
+          </Flex>
+
+          <Flex alignItems="center">
+            <FaBuilding color="blue" />
+            <Text ml={2}>Hotel</Text>
+          </Flex>
+
+          <Flex alignItems="center">
+            <FaCamera color="green" />
+            <Text ml={2}>Tourist Spot</Text>
+          </Flex>
+        </Stack>
         {establishments.map((establishment) => {
           return (
             <div key={establishment.id}>
               <Marker
-                longitude={establishment.location.longitude}
-                latitude={establishment.location.latitude}
+                longitude={parseFloat(establishment.location.longitude)}
+                latitude={parseFloat(establishment.location.latitude)}
                 onClick={() => setPopupEstablishment(establishment)}
               >
                 <Text
-                  textAlign="center"
                   background={markerBorder(establishment)}
                   p="1"
                   rounded="3px"
@@ -68,7 +103,7 @@ export default function Locations({ auth, establishments }) {
             </div>
           );
         })}
-        {popupEstablishment ? (
+        {/* {popupEstablishment ? (
           <Popup
             longitude={popupEstablishment.location.longitude}
             latitude={popupEstablishment.location.latitude}
@@ -80,7 +115,7 @@ export default function Locations({ auth, establishments }) {
           </Popup>
         ) : (
           <></>
-        )}
+        )} */}
       </Map>
     </Navbar>
   );

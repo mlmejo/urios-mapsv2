@@ -16,6 +16,7 @@ return new class extends Migration
             $table->time('opening_time');
             $table->time('closing_time');
             $table->enum('category', ['Restaurant', 'Hotel', 'Tourist Spot']);
+            $table->enum('pricing', ['low', 'medium', 'high']);
         });
     }
 

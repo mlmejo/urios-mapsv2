@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm } from "@inertiajs/react";
 
-export default function MessagesSection({ user, establishment, inquiries }) {
+export default function MessagesSection({ user, t, establishment, inquiries }) {
   const { data, setData, post, reset } = useForm({
     message: "",
   });
@@ -20,6 +20,7 @@ export default function MessagesSection({ user, establishment, inquiries }) {
     post(
       route("inquiries.store", {
         establishment: establishment.id,
+        t: t.id,
       }),
       {
         onSuccess: () => reset(),
@@ -36,15 +37,15 @@ export default function MessagesSection({ user, establishment, inquiries }) {
     >
       <Box bg="white" flex="1" boxShadow="md" overflowY="scroll">
         <Box bg="gray.200" py={2} px={4} borderBottomWidth="1px">
-          <Text fontWeight="bold">{establishment.name}</Text>
+          <Text fontWeight="bold">{t ? t.name : establishment.name}</Text>
         </Box>
         <Stack p={4} spacing={4}>
           {inquiries &&
-            inquiries.map((inquiry) => {
+            inquiries.map((inquiry, index) => {
               if (inquiry.receiver.id == inquiry.sender.id) {
                 return (
-                  <>
-                    <Flex key={inquiry.id} alignItems="center" mb={2}>
+                  <Box key={index}>
+                    <Flex alignItems="center" mb={2}>
                       <Avatar
                         name={inquiry.receiver.name}
                         src={"/" + inquiry.receiver.image.path}
@@ -56,7 +57,6 @@ export default function MessagesSection({ user, establishment, inquiries }) {
                       </Box>
                     </Flex>
                     <Flex
-                      key={inquiry.id}
                       alignItems="center"
                       justify="flex-end"
                     >
@@ -70,13 +70,13 @@ export default function MessagesSection({ user, establishment, inquiries }) {
                         ml={2}
                       />
                     </Flex>
-                  </>
+                  </Box>
                 );
               }
 
               if (inquiry.receiver.id === user.id) {
                 return (
-                  <Flex key={inquiry.id} alignItems="center" mb={2}>
+                  <Flex key={index} alignItems="center" mb={2}>
                     <Avatar
                       name={inquiry.receiver.name}
                       src={"/" + inquiry.receiver.image.path}
@@ -88,9 +88,9 @@ export default function MessagesSection({ user, establishment, inquiries }) {
                     </Box>
                   </Flex>
                 );
-              } else {
+              } else if (inquiry.sender_id === user.id) {
                 return (
-                  <Flex key={inquiry.id} alignItems="center" justify="flex-end">
+                  <Flex key={index} alignItems="center" justify="flex-end">
                     <Box bg="teal.500" borderRadius="md" p={2} color="white">
                       <Text>{inquiry.message}</Text>
                     </Box>
